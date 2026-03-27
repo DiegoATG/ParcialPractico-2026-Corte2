@@ -5,6 +5,9 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
@@ -15,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/blueprints")
+@RequestMapping("/api/v1/blueprints")
 public class BlueprintsAPIController {
 
     private final BlueprintsServices services;
@@ -23,6 +26,22 @@ public class BlueprintsAPIController {
     public BlueprintsAPIController(BlueprintsServices services) { this.services = services; }
 
     // GET /blueprints
+    @Operation(
+            summary = "Obtener todos los BluePrints",
+            description = "Obtiene toda la información de los puntos con sus respectivos nombres y autores"
+    )
+
+    @ApiResponses({
+            @ApiResponse (
+                responseCode = "200",
+                description = "Todos los puntos se obtuvieron correctamente."
+
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "Ningun BluePrint fue encontrado"
+            )
+    })
     @GetMapping
     public ResponseEntity<Set<Blueprint>> getAll() {
         return ResponseEntity.ok(services.getAllBlueprints());
